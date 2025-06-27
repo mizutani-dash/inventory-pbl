@@ -103,10 +103,30 @@ def upload_file():
 def show_data():
     """データベースのデータを表示します。"""
     db = get_db()
-    cur = db.execute('SELECT date, product_name, units_sold FROM sales ORDER BY date DESC')
-    entries = cur.fetchall()
+    entries = db.execute('SELECT id, date, product_name, units_sold FROM sales ORDER BY id DESC').fetchall()
     db.close()
     return render_template('data.html', entries=entries)
+
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_entry(id):
+    """特定のIDのエントリを削除します。"""
+    db = get_db()
+    with db:
+        db.execute('DELETE FROM sales WHERE id = ?', (id,))
+    db.close()
+    return redirect(url_for('show_data'))
+
+
+@app.route('/delete_all', methods=['POST'])
+def delete_all_entries():
+    """すべてのエントリとアップロードログを削除します。"""
+    db = get_db()
+    with db:
+        db.execute('DELETE FROM sales')
+        db.execute('DELETE FROM upload_log')
+    db.close()
+    return redirect(url_for('show_data'))
 
 def calculate_file_hash(filepath):
     hasher = hashlib.md5()
