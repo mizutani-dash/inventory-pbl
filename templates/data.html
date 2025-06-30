@@ -14,7 +14,8 @@
                 <input type="text" id="searchInput" onkeyup="searchTable()" class="form-control" placeholder="商品名で検索...">
             </div>
             <div class="col-md-6 text-end">
-                <form action="{{ url_for('delete_all_entries') }}" method="post" onsubmit="return confirm('本当にすべてのデータを削除しますか？アップロード履歴もリセットされます。');">
+                <a href="{{ url_for('export_excel') }}" class="btn btn-success me-2">Excelへエクスポート</a>
+                <form action="{{ url_for('delete_all_entries') }}" method="post" onsubmit="return confirm('本当にすべてのデータを削除しますか？アップロード履歴もリセットされます。');" style="display: inline;">
                     <button type="submit" class="btn btn-danger">全件削除</button>
                 </form>
             </div>
@@ -34,7 +35,7 @@
                 <tr>
                     <td>{{ entry.date }}</td>
                     <td>{{ entry.product_name }}</td>
-                    <td>{{ entry.units_sold }}</td>
+                    <td>{{ entry.sales_count }}</td>
                     <td>
                         <form action="{{ url_for('delete_entry', id=entry.id) }}" method="post" onsubmit="return confirm('このデータを削除しますか？');">
                             <button type="submit" class="btn btn-sm btn-warning">削除</button>
